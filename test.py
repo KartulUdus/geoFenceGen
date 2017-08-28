@@ -6,6 +6,7 @@ import csv
 import configargparse
 
 def main():
+
 ##ARGS
     parser = configargparse.ArgParser(description='geoFenceGen')
     parser.add_argument('-dir', '--directory', help='Directory and filename of geofence. ex: geofence/bratislava.txt', required=True)
@@ -16,21 +17,21 @@ def main():
 
 ## Get polygon
     raw = json.load(urllib2.urlopen(end))
-    coords = [x for x in raw if x['osm_type'] == 'relation'][0]['geojson']['coordinates'][0]
+    coords = [x for x in raw if x['osm_type'] == 'relation'][0]['geojson']['coordinates']
 
 ##check if polygon is multipolygon
 
 
-    print(len(coords[0]))
+    print(len(coords[0][0]))
 
-    if (len(coords[0]) == 2):
+    if (len(coords[0][0]) == 2):
 ##Write fenceFile
         l = [["{}".format(args.location)]]
         with open('{}'.format(args.directory), 'wb') as f:
 
             writer = csv.writer(f)
             writer.writerow(l)
-            for row in (coords):
+            for row in (coords[0]):
                    writer.writerow(row[::-1])
 
         print("your geofence of {} has been created in: \n{}\{}".format(args.location,wd, args.directory))
@@ -39,15 +40,14 @@ def main():
 
         with open('{}'.format(args.directory), 'wb') as f:
             writer = csv.writer(f)
-            for gf in (coords):
+            for z in (coords):
                 n=0
-                l = [["{}".format(args.location)]]
-
-                for row in (coords [n]):
-                    writer.writerow(l)
+                l = [["{}{}".format(args.location,n+1)]]
+                writer.writerow(l)
+                for row in (coords[0][n]):
                     writer.writerow(row[::-1])
                 n+=1
-
+            print("your multiplygon geofence of {} has been created in: \n{}\{}".format(args.location, wd, args.directory))
 
 if __name__ == "__main__":
     main()
