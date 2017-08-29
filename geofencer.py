@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-import os
 import json
 import urllib2
 import csv
@@ -23,7 +22,7 @@ def main():
     parser.add_argument(
         '-w',
         '--way',
-        help=('Use if the area does not have a relational polygon, but has a type:way'),
+        help=('Use if there\'s no relational polygon'),
         action='store_true',
         default=False)
     parser.add_argument(
@@ -34,7 +33,6 @@ def main():
         default=False)
 
     args = parser.parse_args()
-    wd = os.getcwd()
     end = "https://nominatim.openstreetmap.org/search.php?q='{}'&polygon_geojson=1&format=json".format(
         args.location)
 
@@ -58,9 +56,8 @@ def main():
                 writer.writerow(row[::-1])
 
         print(
-            "your geofence of {} has been created in: \n{}\{}".format(
+            "your geofence of {} has been created in: {}".format(
                 args.location,
-                wd,
                 args.directory))
 
     else:
@@ -75,8 +72,8 @@ def main():
                     writer.writerow(row[::-1])
                 n += 1
             print(
-                "your multiplygon geofence of {} has been created in: \n{}\{}".format(
-                    args.location, wd, args.directory))
+                "Multiplygon geofence of {} has been created in: {}".format(
+                    args.location, args.directory))
 
 
 if __name__ == "__main__":
