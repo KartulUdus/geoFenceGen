@@ -11,6 +11,9 @@ def main():
     parser = configargparse.ArgParser(description='geoFenceGen')
     parser.add_argument('-dir', '--directory', help='Directory and filename of geofence. ex: geofence/bratislava.txt', required=True)
     parser.add_argument('-l', '--location', help='City/Country/areas you wouls like the geofence for', required=True)
+    parser.add_argument('-w', '--way', help=('Use if the area does not have a relational polygon, but has a type:way'), action='store_true', default=False)
+    parser.add_argument('-mp', '--multi-polygon', help=('Use if you wish to write all polygons of an area'), action='store_true', default=False)
+
     args = parser.parse_args()
     wd = os.getcwd()
     end = "https://nominatim.openstreetmap.org/search.php?q='{}'&polygon_geojson=1&format=json".format(args.location)
@@ -37,7 +40,7 @@ def main():
         print("your geofence of {} has been created in: \n{}\{}".format(args.location,wd, args.directory))
 
     else:
-
+##Write fenceFile
         with open('{}'.format(args.directory), 'wb') as f:
             writer = csv.writer(f)
             for z in (coords):
@@ -51,3 +54,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
