@@ -1,0 +1,1 @@
+select lat, lon from gym
