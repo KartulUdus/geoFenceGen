@@ -1,18 +1,22 @@
 # -*- coding: UTF-8 -*-
 
 import configargparse
+import csv
 import pandas as pd, numpy as np, matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from geopy.distance import great_circle
 from shapely.geometry import MultiPoint
+from utils.args import get_args
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
 
-def get_args():
 
 
 
-def cluster():
-    df = pd.read_csv('gymDumpRaw.csv')
-    coords = df.as_matrix(columns=['lat', 'lon'])
+
 
 
 def connect_db():
@@ -32,7 +36,7 @@ def connect_db():
 def fetchGym():
 
 #Load the query
-    file = open('utils/getGyms.sql' 'r')
+    file = open('utils/getGyms.sql', 'r')
     sql = " ".join(file.readlines())
 
 #Dump the coords in csv file
@@ -43,8 +47,26 @@ def fetchGym():
             'gymDumpRaw.csv',
             'w'),
         delimiter=',',
-        quoting=csv.QUOTE_NONE)
+        quoting=3)
     cur = db.cursor()
     cur.execute(sql)
     for row in cur.fetchall():
         dump_writer.writerow(row)
+
+def cluster():
+    df = pd.read_csv('gymDumpRaw.csv')
+    coords = df.as_matrix(columns=['lat', 'lon'])
+
+    print df
+
+    # kms_per_radian = 6371.0088
+    # epsilon = 1.5 / kms_per_radian
+    # db = DBSCAN(eps=epsilon, min_samples=1, algorithm='ball_tree', metric='precomputed').fit(np.radians(coords))
+    # cluster_labels = db.labels_
+    # num_clusters = len(set(cluster_labels))
+    # clusters = pd.Series([coords[cluster_labels == n] for n in range(num_clusters)])
+    # print('Number of clusters: {}'.format(num_clusters))
+
+
+if __name__ == "__main__":
+    cluster()

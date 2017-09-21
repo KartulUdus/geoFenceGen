@@ -1,1 +1,1 @@
-select lat, lon from gym
+select latitude, longitude from gym
