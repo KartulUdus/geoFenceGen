@@ -39,34 +39,31 @@ def fetchGym():
     file = open('utils/getGyms.sql', 'r')
     sql = " ".join(file.readlines())
 
-#Dump the coords in csv file
-
     db = connect_db()
-    dump_writer = csv.writer(
-        open(
-            'gymDumpRaw.csv',
-            'w'),
-        delimiter=',',
-        quoting=3)
     cur = db.cursor()
     cur.execute(sql)
-    for row in cur.fetchall():
-        dump_writer.writerow(row)
-
+    coords = cur.fetchall()
+    return coords
 def cluster():
-    df = pd.read_csv('gymDumpRaw.csv')
-    coords = df.as_matrix(columns=['lat', 'lon'])
-
-    print df
-
-    # kms_per_radian = 6371.0088
-    # epsilon = 1.5 / kms_per_radian
-    # db = DBSCAN(eps=epsilon, min_samples=1, algorithm='ball_tree', metric='precomputed').fit(np.radians(coords))
-    # cluster_labels = db.labels_
-    # num_clusters = len(set(cluster_labels))
-    # clusters = pd.Series([coords[cluster_labels == n] for n in range(num_clusters)])
-    # print('Number of clusters: {}'.format(num_clusters))
 
 
+    coords = fetchGym()
+    with open('gymgeofence.txt', 'wb') as f:
+        writer = csv.writer(f)
+        n=0
+        for row in coords:
+            l = [['gym']]
+            writer.writerow(l)
+            a=(coords[n][0] + 0.003,coords[n][1])
+            b=(coords[n][0], coords[n][1] + 0.005)
+            c=(coords[n][0] - 0.003, coords[n][1])
+            d=(coords[n][0], coords[n][1] - 0.005)
+
+
+            writer.writerow(a)
+            writer.writerow(b)
+            writer.writerow(c)
+            writer.writerow(d)
+            n+=1
 if __name__ == "__main__":
     cluster()
