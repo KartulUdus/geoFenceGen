@@ -54,10 +54,10 @@ def cluster():
         for row in coords:
             l = [['gym']]
             writer.writerow(l)
-            a=(coords[n][0] + 0.003,coords[n][1])
-            b=(coords[n][0], coords[n][1] + 0.005)
-            c=(coords[n][0] - 0.003, coords[n][1])
-            d=(coords[n][0], coords[n][1] - 0.005)
+            a=(coords[n][0] + 0.004,coords[n][1])
+            b=(coords[n][0], coords[n][1] + 0.006)
+            c=(coords[n][0] - 0.004, coords[n][1])
+            d=(coords[n][0], coords[n][1] - 0.006)
 
 
             writer.writerow(a)
