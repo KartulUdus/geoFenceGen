@@ -1,11 +1,7 @@
 # -*- coding: UTF-8 -*-
 
-import configargparse
+
 import csv
-import pandas as pd, numpy as np, matplotlib.pyplot as plt
-from sklearn.cluster import DBSCAN
-from geopy.distance import great_circle
-from shapely.geometry import MultiPoint
 from utils.args import get_args
 try:
     import pymysql
